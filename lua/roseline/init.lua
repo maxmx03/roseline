@@ -1,3 +1,4 @@
+vim.opt.statusline = "%!v:lua.require('roseline').load()"
 local M = {}
 
 M.config = nil
