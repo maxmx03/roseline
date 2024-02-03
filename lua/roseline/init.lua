@@ -1,33 +1,8 @@
-vim.opt.statusline = "%!v:lua.require('roseline').setup()"
+vim.opt.statusline = "%!v:lua.require('roseline').load()"
 
 local M = {}
 
-local icons = {
-  vim = '',
-  git = {
-    head = '',
-    added = '',
-    changed = '',
-    removed = '',
-  },
-  diagnostic = {
-    Error = '',
-    Warning = '',
-    Information = '',
-    Question = '',
-    Hint = '󰌶',
-    Debug = '',
-    Ok = '󰧱',
-  },
-  os = {
-    Linux = '',
-    microsoft = '',
-    Darwin = '',
-  },
-  default = { left = '', right = '' },
-  block = { left = '█', right = '█' },
-  round = { left = '', right = '' },
-}
+M.config = nil
 
 ---@param item string
 ---@param group_name string
@@ -36,9 +11,10 @@ local function color(item, group_name)
   return '%#' .. group_name .. '#' .. item .. '%*'
 end
 
-local function set_highlight()
+---@param theme string
+local function set_highlight(theme)
   local group = 'St'
-  local ok, colors = pcall(require, 'rose-pine.palette')
+  local ok, colors = pcall(require, 'roseline.themes.' .. theme)
 
   if not ok then
     return
@@ -46,44 +22,44 @@ local function set_highlight()
 
   local hl = vim.api.nvim_set_hl
   local modes_colors = {
-    Normal = colors.foam,
-    Insert = colors.rose,
-    Visual = colors.iris,
-    Replace = colors.love,
-    Command = colors.gold,
+    Normal = colors.cyan,
+    Insert = colors.pink,
+    Visual = colors.purple,
+    Replace = colors.red,
+    Command = colors.yellow,
   }
 
   for group_name, group_color in pairs(modes_colors) do
-    hl(0, group .. group_name, { fg = group_color, bg = colors.base })
+    hl(0, group .. group_name, { fg = group_color, bg = colors.background })
   end
 
   for group_name, group_color in pairs(modes_colors) do
     group_name = group_name .. 'Reverse'
-    hl(0, group .. group_name, { fg = group_color, reverse = true })
+    hl(0, group .. group_name .. 'Reverse', { fg = group_color, reverse = true })
   end
 
-  hl(0, group .. 'Neovim', { fg = colors.foam, reverse = true })
-  hl(0, group .. 'GitHead', { fg = colors.iris, bg = colors.base })
-  hl(0, group .. 'GitAdded', { fg = colors.foam, bg = colors.base })
-  hl(0, group .. 'GitRemoved', { fg = colors.love, bg = colors.base })
-  hl(0, group .. 'GitChanged', { fg = colors.rose, bg = colors.base })
-  hl(0, group .. 'DiagnosticError', { fg = colors.love, reverse = true })
-  hl(0, group .. 'DiagnosticWarn', { fg = colors.gold, reverse = true })
-  hl(0, group .. 'DiagnosticHint', { fg = colors.iris, reverse = true })
-  hl(0, group .. 'DiagnosticInfo', { fg = colors.foam, reverse = true })
-  hl(0, group .. 'DiagnosticErrorLspClient', { fg = colors.love, bg = colors.base })
-  hl(0, group .. 'DiagnosticWarnLspClient', { fg = colors.gold, bg = colors.base })
-  hl(0, group .. 'DiagnosticHintLspClient', { fg = colors.iris, bg = colors.base })
-  hl(0, group .. 'DiagnosticInfoLspClient', { fg = colors.foam, bg = colors.base })
-  hl(0, group .. 'Lsp', { fg = colors.foam, bg = colors.base })
-  hl(0, group .. 'LspReverse', { fg = colors.foam, reverse = true })
-  hl(0, group .. 'Info', { fg = colors.foam, bg = colors.base })
-  hl(0, group .. 'InfoReverse', { fg = colors.foam, reverse = true })
+  hl(0, group .. 'GitHead', { fg = colors.purple, bg = colors.background })
+  hl(0, group .. 'GitAdded', { fg = colors.cyan, bg = colors.background })
+  hl(0, group .. 'GitRemoved', { fg = colors.red, bg = colors.background })
+  hl(0, group .. 'GitChanged', { fg = colors.pink, bg = colors.background })
+  hl(0, group .. 'DiagnosticError', { fg = colors.red, reverse = true })
+  hl(0, group .. 'DiagnosticWarn', { fg = colors.yellow, reverse = true })
+  hl(0, group .. 'DiagnosticHint', { fg = colors.purple, reverse = true })
+  hl(0, group .. 'DiagnosticInfo', { fg = colors.cyan, reverse = true })
+  hl(0, group .. 'DiagnosticErrorLspClient', { fg = colors.red, bg = colors.background })
+  hl(0, group .. 'DiagnosticWarnLspClient', { fg = colors.yellow, bg = colors.background })
+  hl(0, group .. 'DiagnosticHintLspClient', { fg = colors.purple, bg = colors.background })
+  hl(0, group .. 'DiagnosticInfoLspClient', { fg = colors.cyan, bg = colors.background })
+  hl(0, group .. 'Lsp', { fg = colors.cyan, bg = colors.base })
+  hl(0, group .. 'LspReverse', { fg = colors.cyan, reverse = true })
+  hl(0, group .. 'Info', { fg = colors.cyan, bg = colors.background })
+  hl(0, group .. 'InfoReverse', { fg = colors.cyan, reverse = true })
 end
 
 --- mode
 ---@return string
-local function layout_a()
+local function section_a()
+  local icons = M.config.icons
   local modes = {
     ['n'] = { 'NORMAL', 'Normal' },
     ['no'] = { 'NORMAL (no)', 'Normal' },
@@ -135,7 +111,8 @@ end
 
 --- git sign
 ---@return string
-local function layout_b()
+local function section_b()
+  local icons = M.config.icons
   if not vim.b.gitsigns_status_dict then
     return ''
   end
@@ -166,9 +143,18 @@ end
 
 --- lsp and diagnostic
 ---@return string
-local function layout_d()
+local function section_d()
+  local icons = M.config.icons
   local bufnr = vim.api.nvim_get_current_buf()
-  local clients = vim.lsp.get_active_clients { bufnr = bufnr }
+  local clients
+
+  if vim.fn.has 'nvim-0.10' == 1 then
+    clients = vim.lsp.get_clients { bufnr = bufnr }
+  else
+    ---@diagnostic disable-next-line: deprecated
+    clients = vim.lsp.get_active_clients { bufnr = bufnr }
+  end
+
   local client_name = ''
   local default_msg = icons.diagnostic.Ok .. ' No Active Client'
 
@@ -229,7 +215,8 @@ local function layout_d()
   )
 end
 
-local function layout_e()
+local function section_e()
+  local icons = M.config.icons
   return string.format(
     '%s%s%s %s',
     color(icons.round.left, 'StInfo'),
@@ -239,18 +226,65 @@ local function layout_e()
   )
 end
 
-function M.setup()
-  set_highlight()
-
+local function default_config()
   local layout = {
-    a = layout_a(),
-    b = layout_b(),
+    a = section_a,
+    b = section_b,
     c = '',
-    d = layout_d(),
-    e = layout_e(),
+    d = section_d,
+    e = section_e,
+  }
+  local theme = 'rose-pine'
+  local icons = {
+    vim = '',
+    git = {
+      head = '',
+      added = '',
+      changed = '',
+      removed = '',
+    },
+    diagnostic = {
+      Error = '',
+      Warning = '',
+      Information = '',
+      Question = '',
+      Hint = '󰌶',
+      Debug = '',
+      Ok = '󰧱',
+    },
+    os = {
+      Linux = '',
+      microsoft = '',
+      Darwin = '',
+    },
+    default = { left = '', right = '' },
+    block = { left = '█', right = '█' },
+    round = { left = '', right = '' },
   }
 
-  return string.format('%s %s %%= %s %%= %s %s', layout.a, layout.b, layout.c, layout.d, layout.e)
+  return {
+    layout = layout,
+    theme = theme,
+    icons = icons,
+  }
+end
+
+function M.load()
+  M.config = M.config or default_config()
+  local sections = M.config.layout
+  return string.format(
+    '%s %s %%= %s %%= %s %s',
+    sections.a(),
+    sections.b(),
+    sections.c(),
+    sections.d(),
+    sections.e()
+  )
+end
+
+function M.setup(opts)
+  M.config = vim.tbl_extend('force', default_config(), opts or {})
+  set_highlight(M.config.theme)
 end
 
 return M
