@@ -1,5 +1,3 @@
-vim.opt.statusline = "%!v:lua.require('roseline').load()"
-
 local M = {}
 
 M.config = nil
@@ -34,7 +32,6 @@ local function set_highlight(theme)
   end
 
   for group_name, group_color in pairs(modes_colors) do
-    group_name = group_name .. 'Reverse'
     hl(0, group .. group_name .. 'Reverse', { fg = group_color, reverse = true })
   end
 
@@ -230,7 +227,9 @@ local function default_config()
   local layout = {
     a = section_a,
     b = section_b,
-    c = '',
+    c = function ()
+      return ''
+    end,
     d = section_d,
     e = section_e,
   }
