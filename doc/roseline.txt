@@ -1,9 +1,10 @@
-*roseline.txt*          For NVIM v0.9.1          Last change: 2024 February 03
+*roseline.txt*          For NVIM v0.9.1          Last change: 2024 February 04
 
 ==============================================================================
 Table of Contents                                 *roseline-table-of-contents*
 
 1. Roseline                                                |roseline-roseline|
+  - Requirements                              |roseline-roseline-requirements|
   - Setup                                            |roseline-roseline-setup|
   - Configuration                            |roseline-roseline-configuration|
   - Docs                                              |roseline-roseline-docs|
@@ -13,6 +14,12 @@ Table of Contents                                 *roseline-table-of-contents*
 1. Roseline                                                *roseline-roseline*
 
 Minimal statusline
+
+
+REQUIREMENTS                                  *roseline-roseline-requirements*
+
+- lsp <neovim/nvim-lspconfig>
+- gitsign <https://github.com/lewis6991/gitsigns.nvim>
 
 
 SETUP                                                *roseline-roseline-setup*
@@ -36,7 +43,7 @@ LAZY ~
 CONFIGURATION                                *roseline-roseline-configuration*
 
 To customize layout you need to create a function that will return a string,
-this string will represent the section of your statusline
+this string will be the section of your statusline
 
 >lua
     require('roseline').setup {
@@ -44,7 +51,7 @@ this string will represent the section of your statusline
         layout = {
             a = section_a,
             b = section_b,
-            c = '',
+            c = section_c,
             d = section_d,
             e = section_e,
         },
