@@ -234,7 +234,7 @@ local function default_config()
   local layout = {
     a = section_a,
     b = section_b,
-    c = function ()
+    c = function()
       return ''
     end,
     d = section_d,
