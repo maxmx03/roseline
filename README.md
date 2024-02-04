@@ -2,6 +2,11 @@
 
 Minimal statusline
 
+## Requirements
+
+- [lsp](neovim/nvim-lspconfig)
+- [gitsign](https://github.com/lewis6991/gitsigns.nvim)
+
 ## Setup
 
 ### lazy
@@ -21,7 +26,7 @@ return {
 ## Configuration
 
 To customize layout you need to create a function that will return a string,
-this string will represent the section of your statusline
+this string will be the section of your statusline
 
 ```lua
 require('roseline').setup {
@@ -29,7 +34,7 @@ require('roseline').setup {
     layout = {
         a = section_a,
         b = section_b,
-        c = '',
+        c = section_c,
         d = section_d,
         e = section_e,
     },

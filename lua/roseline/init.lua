@@ -1,4 +1,5 @@
 vim.opt.statusline = "%!v:lua.require('roseline').load()"
+
 local M = {}
 
 M.config = nil
@@ -10,6 +11,7 @@ local function color(item, group_name)
   return '%#' .. group_name .. '#' .. item .. '%*'
 end
 
+--- roseline highlight groups
 ---@param theme string
 local function set_highlight(theme)
   local group = 'St'
@@ -48,13 +50,13 @@ local function set_highlight(theme)
   hl(0, group .. 'DiagnosticWarnLspClient', { fg = colors.yellow, bg = colors.background })
   hl(0, group .. 'DiagnosticHintLspClient', { fg = colors.purple, bg = colors.background })
   hl(0, group .. 'DiagnosticInfoLspClient', { fg = colors.cyan, bg = colors.background })
-  hl(0, group .. 'Lsp', { fg = colors.cyan, bg = colors.base })
+  hl(0, group .. 'Lsp', { fg = colors.cyan, bg = colors.background })
   hl(0, group .. 'LspReverse', { fg = colors.cyan, reverse = true })
   hl(0, group .. 'Info', { fg = colors.cyan, bg = colors.background })
   hl(0, group .. 'InfoReverse', { fg = colors.cyan, reverse = true })
 end
 
---- mode
+--- section for modes
 ---@return string
 local function section_a()
   local icons = M.config.icons
@@ -107,7 +109,7 @@ local function section_a()
   return string.format('%s%s%s%s%s', block, neovim, block, mode, default_right)
 end
 
---- git sign
+--- section for gitsigns
 ---@return string
 local function section_b()
   local icons = M.config.icons
@@ -139,7 +141,7 @@ local function section_b()
   return string.format('%s %s %s %s', head, added, changed, removed)
 end
 
---- lsp and diagnostic
+--- section for lsp and diagnostics
 ---@return string
 local function section_d()
   local icons = M.config.icons
@@ -213,6 +215,8 @@ local function section_d()
   )
 end
 
+--- section for line and total line
+---@return string
 local function section_e()
   local icons = M.config.icons
   return string.format(
@@ -224,6 +228,8 @@ local function section_e()
   )
 end
 
+--- roseline default config
+---@return table
 local function default_config()
   local layout = {
     a = section_a,
