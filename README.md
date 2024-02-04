@@ -1,5 +1,7 @@
 # Roseline
 
+![Captura de tela 2024-02-01 223136](https://github.com/maxmx03/roseline/assets/50273941/2d6593b7-6e80-4d22-a714-c84b15b325bb)
+
 Minimal statusline
 
 ## Requirements
