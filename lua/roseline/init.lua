@@ -38,6 +38,8 @@ local function set_highlight(theme)
     hl(0, group .. group_name .. 'Reverse', { fg = group_color, reverse = true })
   end
 
+  hl(0, 'StatusLine', { fg = colors.foreground, bg = colors.background })
+  hl(0, 'StatusLineNC', { fg = colors.gray, bg = colors.background })
   hl(0, group .. 'GitHead', { fg = colors.purple, bg = colors.background })
   hl(0, group .. 'GitAdded', { fg = colors.cyan, bg = colors.background })
   hl(0, group .. 'GitRemoved', { fg = colors.red, bg = colors.background })
