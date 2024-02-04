@@ -1,6 +1,6 @@
 # Roseline
 
-![Captura de tela 2024-02-01 223136](https://github.com/maxmx03/roseline/assets/50273941/2d6593b7-6e80-4d22-a714-c84b15b325bb)
+![screenshot](https://github.com/maxmx03/roseline/assets/50273941/2d6593b7-6e80-4d22-a714-c84b15b325bb)
 
 Minimal statusline
 
@@ -27,8 +27,8 @@ return {
 
 ## Configuration
 
-To customize layout you need to create a function that will return a string,
-this string will be the section of your statusline
+To customize the layout, you need to create a function that will return a
+string. This string will be the section of your status line.
 
 ```lua
 require('roseline').setup {
@@ -75,7 +75,7 @@ require('roseline').setup {
 
 ## Contribution
 
-Any contribution are welcome, just send a pull request.
+Any contributions are welcome; just send a pull request.
 
 ### Running Tests
 
