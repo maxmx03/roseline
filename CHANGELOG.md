@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.0](https://github.com/maxmx03/roseline/compare/v1.0.0...v1.1.0) (2024-02-04)
+
+
+### Features
+
+* statusline hl groups ([fd9aea1](https://github.com/maxmx03/roseline/commit/fd9aea11825a397a163907f2950e1ea004656d2d))
+
 ## 1.0.0 (2024-02-04)
 
 
