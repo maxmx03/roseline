@@ -218,7 +218,7 @@ local function section_d()
 
   local error_msg = (errors and errors > 0) and (icons.diagnostic.Error .. ' ' .. errors) or nil
   local warning_msg = (warnings and warnings > 0) and (icons.diagnostic.Warning .. ' ' .. warnings)
-      or nil
+    or nil
   local hint_msg = (hints and hints > 0) and (icons.diagnostic.Hint .. ' ' .. hints) or nil
   local info_msg = (info and info > 0) and (icons.diagnostic.Information .. ' ' .. info) or nil
 
