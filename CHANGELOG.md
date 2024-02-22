@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.0](https://github.com/maxmx03/roseline/compare/v1.2.1...v1.3.0) (2024-02-22)
+
+
+### Features
+
+* auto theme ([29956eb](https://github.com/maxmx03/roseline/commit/29956ebd1627ca0f6fa9544a7a3634da0520da68))
+
 ## [1.2.1](https://github.com/maxmx03/roseline/compare/v1.2.0...v1.2.1) (2024-02-22)
 
 
