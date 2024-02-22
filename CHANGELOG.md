@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.2.1](https://github.com/maxmx03/roseline/compare/v1.2.0...v1.2.1) (2024-02-22)
+
+
+### Bug Fixes
+
+* theming ([ed64e8b](https://github.com/maxmx03/roseline/commit/ed64e8b79c706ea2b18066024a19cedf5a83b766))
+* to_hex function ([91558c7](https://github.com/maxmx03/roseline/commit/91558c79323b97bc225c3ebfdeaed4dcaab64721))
+
 ## [1.2.0](https://github.com/maxmx03/roseline/compare/v1.1.1...v1.2.0) (2024-02-22)
 
 
