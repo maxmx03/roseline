@@ -11,13 +11,21 @@ local function color(item, group_name)
   return '%#' .. group_name .. '#' .. item .. '%*'
 end
 
+local function to_hex(decimal)
+  if type(decimal) ~= 'number' then
+    return decimal
+  end
+  local hex = string.format('#%06x', decimal)
+  return hex
+end
+
 local function get_hl(name)
   local output = vim.api.nvim_get_hl(0, { name = name, link = false })
 
   local t = {}
 
   for key, value in pairs(output) do
-    t[key] = M.to_hex(value)
+    t[key] = to_hex(value)
   end
 
   return t
