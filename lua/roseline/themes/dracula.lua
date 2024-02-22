@@ -1,11 +1,10 @@
 return {
   background = '#21222c',
-  gray = '#6272A4',
   foreground = '#F8F8F2',
-  red = '#FF5555',
-  yellow = '#F1FA8C',
-  pink = '#FF79C6',
-  green = '#50FA7B',
-  cyan = '#8BE9FD',
-  purple = '#BD93F9',
+  gray = '#6272A4',
+  replace = '#FF5555',
+  visual = '#FF79C6',
+  insert = '#50FA7B',
+  normal = '#8BE9FD',
+  command = '#BD93F9',
 }

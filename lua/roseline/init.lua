@@ -11,6 +11,18 @@ local function color(item, group_name)
   return '%#' .. group_name .. '#' .. item .. '%*'
 end
 
+local function get_hl(name)
+  local output = vim.api.nvim_get_hl(0, { name = name, link = false })
+
+  local t = {}
+
+  for key, value in pairs(output) do
+    t[key] = M.to_hex(value)
+  end
+
+  return t
+end
+
 --- roseline highlight groups
 ---@param theme string
 local function set_highlight(theme)
@@ -23,11 +35,11 @@ local function set_highlight(theme)
 
   local hl = vim.api.nvim_set_hl
   local modes_colors = {
-    Normal = colors.cyan,
-    Insert = colors.pink,
-    Visual = colors.purple,
-    Replace = colors.red,
-    Command = colors.yellow,
+    Normal = colors.normal,
+    Insert = colors.insert,
+    Visual = colors.visual,
+    Replace = colors.replace,
+    Command = colors.command,
   }
 
   for group_name, group_color in pairs(modes_colors) do
@@ -40,22 +52,34 @@ local function set_highlight(theme)
 
   hl(0, 'StatusLine', { fg = colors.foreground, bg = colors.background })
   hl(0, 'StatusLineNC', { fg = colors.gray, bg = colors.background })
-  hl(0, group .. 'GitHead', { fg = colors.purple, bg = colors.background })
-  hl(0, group .. 'GitAdded', { fg = colors.cyan, bg = colors.background })
-  hl(0, group .. 'GitRemoved', { fg = colors.red, bg = colors.background })
-  hl(0, group .. 'GitChanged', { fg = colors.pink, bg = colors.background })
-  hl(0, group .. 'DiagnosticError', { fg = colors.red, reverse = true })
-  hl(0, group .. 'DiagnosticWarn', { fg = colors.yellow, reverse = true })
-  hl(0, group .. 'DiagnosticHint', { fg = colors.purple, reverse = true })
-  hl(0, group .. 'DiagnosticInfo', { fg = colors.cyan, reverse = true })
-  hl(0, group .. 'DiagnosticErrorLspClient', { fg = colors.red, bg = colors.background })
-  hl(0, group .. 'DiagnosticWarnLspClient', { fg = colors.yellow, bg = colors.background })
-  hl(0, group .. 'DiagnosticHintLspClient', { fg = colors.purple, bg = colors.background })
-  hl(0, group .. 'DiagnosticInfoLspClient', { fg = colors.cyan, bg = colors.background })
-  hl(0, group .. 'Lsp', { fg = colors.cyan, bg = colors.background })
-  hl(0, group .. 'LspReverse', { fg = colors.cyan, reverse = true })
-  hl(0, group .. 'Info', { fg = colors.cyan, bg = colors.background })
-  hl(0, group .. 'InfoReverse', { fg = colors.cyan, reverse = true })
+  local diag = {
+    error = get_hl('DiagnosticError').fg or 'red',
+    warn = get_hl('DiagnosticWarn').fg or 'yellow',
+    hint = get_hl('DiagnosticHint').fg or 'blue',
+    info = get_hl('DiagnosticInfo').fg or 'blue',
+  }
+  local git = {
+    head = get_hl('Title').fg or 'red',
+    added = get_hl('GitSignsAdd').fg or 'green',
+    changed = get_hl('GitSignsChange').fg or 'yellow',
+    removed = get_hl('GitSignsDelete').fg or 'red',
+  }
+  hl(0, group .. 'GitHead', { fg = git.head, bg = colors.background })
+  hl(0, group .. 'GitAdded', { fg = git.added, bg = colors.background })
+  hl(0, group .. 'GitRemoved', { fg = git.removed, bg = colors.background })
+  hl(0, group .. 'GitChanged', { fg = git.changed, bg = colors.background })
+  hl(0, group .. 'DiagnosticError', { fg = diag.error, reverse = true })
+  hl(0, group .. 'DiagnosticWarn', { fg = diag.warn, reverse = true })
+  hl(0, group .. 'DiagnosticHint', { fg = diag.hint, reverse = true })
+  hl(0, group .. 'DiagnosticInfo', { fg = diag.info, reverse = true })
+  hl(0, group .. 'DiagnosticErrorLspClient', { fg = diag.error, bg = colors.background })
+  hl(0, group .. 'DiagnosticWarnLspClient', { fg = diag.warn, bg = colors.background })
+  hl(0, group .. 'DiagnosticHintLspClient', { fg = diag.hint, bg = colors.background })
+  hl(0, group .. 'DiagnosticInfoLspClient', { fg = diag.info, bg = colors.background })
+  hl(0, group .. 'Lsp', { fg = colors.normal, bg = colors.background })
+  hl(0, group .. 'LspReverse', { fg = colors.normal, reverse = true })
+  hl(0, group .. 'Info', { fg = colors.normal, bg = colors.background })
+  hl(0, group .. 'InfoReverse', { fg = colors.normal, reverse = true })
 end
 
 --- section for modes
@@ -181,7 +205,7 @@ local function section_d()
 
   local error_msg = (errors and errors > 0) and (icons.diagnostic.Error .. ' ' .. errors) or nil
   local warning_msg = (warnings and warnings > 0) and (icons.diagnostic.Warning .. ' ' .. warnings)
-    or nil
+      or nil
   local hint_msg = (hints and hints > 0) and (icons.diagnostic.Hint .. ' ' .. hints) or nil
   local info_msg = (info and info > 0) and (icons.diagnostic.Information .. ' ' .. info) or nil
 
