@@ -1,4 +1,4 @@
-*roseline.txt*          For NVIM v0.9.1          Last change: 2024 February 04
+*roseline.txt*          For NVIM v0.9.1          Last change: 2024 February 22
 
 ==============================================================================
 Table of Contents                                 *roseline-table-of-contents*
