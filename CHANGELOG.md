@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.0](https://github.com/maxmx03/roseline/compare/v1.1.1...v1.2.0) (2024-02-22)
+
+
+### Features
+
+* dracula-theme ([782b0cd](https://github.com/maxmx03/roseline/commit/782b0cd7e3c6177f9ca7655b148ef4244c77d69c))
+
 ## [1.1.1](https://github.com/maxmx03/roseline/compare/v1.1.0...v1.1.1) (2024-02-22)
 
 
