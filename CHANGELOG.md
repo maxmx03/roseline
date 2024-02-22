@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.1](https://github.com/maxmx03/roseline/compare/v1.1.0...v1.1.1) (2024-02-22)
+
+
+### Bug Fixes
+
+* setup ([4b90f6b](https://github.com/maxmx03/roseline/commit/4b90f6b3fd60959f133a5ee81a7ba301fdb96d24))
+
 ## [1.1.0](https://github.com/maxmx03/roseline/compare/v1.0.0...v1.1.0) (2024-02-04)
 
 
