@@ -5,14 +5,27 @@ end
 describe('roseline', function()
   setup(function()
     vim.opt.laststatus = 3
-    require('roseline').setup()
   end)
 
-  test('default theme', function()
+  test('rose-line theme', function()
+    require('roseline').setup {
+      theme = 'rose-pine',
+    }
     local output = vim.api.nvim_get_hl(0, { name = 'StNormal' })
     local foreground = tohex(output.fg)
     local expected = require 'roseline.themes.rose-pine'
-    assert.equal(expected.cyan, foreground)
+    assert.equal(expected.normal, foreground)
+  end)
+
+  test('dracula theme', function()
+    require('roseline').setup {
+      theme = 'dracula',
+    }
+
+    local output = vim.api.nvim_get_hl(0, { name = 'StNormal' })
+    local foreground = tohex(output.fg)
+    local expected = require 'roseline.themes.dracula'
+    assert.equal(expected.normal:lower(), foreground)
   end)
 
   test('user custom icon', function()
