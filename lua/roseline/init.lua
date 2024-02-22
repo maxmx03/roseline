@@ -291,7 +291,7 @@ function M.load()
 end
 
 function M.setup(opts)
-  M.config = vim.tbl_extend('force', default_config(), opts or {})
+  M.config = vim.tbl_deep_extend('force', default_config(), opts or {})
   set_highlight(M.config.theme)
 end
 
