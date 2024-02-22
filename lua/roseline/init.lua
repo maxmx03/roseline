@@ -37,8 +37,14 @@ local function set_highlight(theme)
   local group = 'St'
   local ok, colors = pcall(require, 'roseline.themes.' .. theme)
 
-  if not ok then
-    return
+  if not ok or theme == 'auto' then
+    colors = {
+      normal = get_hl('Statement').fg,
+      insert = get_hl('String').fg,
+      visual = get_hl('Type').fg,
+      replace = get_hl('Error').fg,
+      command = get_hl('Function').fg,
+    }
   end
 
   local hl = vim.api.nvim_set_hl
@@ -49,17 +55,16 @@ local function set_highlight(theme)
     Replace = colors.replace,
     Command = colors.command,
   }
+  local background = get_hl('StatusLine').bg or get_hl('NormalFloat').bg
 
   for group_name, group_color in pairs(modes_colors) do
-    hl(0, group .. group_name, { fg = group_color, bg = colors.background })
+    hl(0, group .. group_name, { fg = group_color, bg = background })
   end
 
   for group_name, group_color in pairs(modes_colors) do
     hl(0, group .. group_name .. 'Reverse', { fg = group_color, reverse = true })
   end
 
-  hl(0, 'StatusLine', { fg = colors.foreground, bg = colors.background })
-  hl(0, 'StatusLineNC', { fg = colors.gray, bg = colors.background })
   local diag = {
     error = get_hl('DiagnosticError').fg or 'red',
     warn = get_hl('DiagnosticWarn').fg or 'yellow',
@@ -72,21 +77,21 @@ local function set_highlight(theme)
     changed = get_hl('GitSignsChange').fg or 'yellow',
     removed = get_hl('GitSignsDelete').fg or 'red',
   }
-  hl(0, group .. 'GitHead', { fg = git.head, bg = colors.background })
-  hl(0, group .. 'GitAdded', { fg = git.added, bg = colors.background })
-  hl(0, group .. 'GitRemoved', { fg = git.removed, bg = colors.background })
-  hl(0, group .. 'GitChanged', { fg = git.changed, bg = colors.background })
+  hl(0, group .. 'GitHead', { fg = git.head, bg = background })
+  hl(0, group .. 'GitAdded', { fg = git.added, bg = background })
+  hl(0, group .. 'GitRemoved', { fg = git.removed, bg = background })
+  hl(0, group .. 'GitChanged', { fg = git.changed, bg = background })
   hl(0, group .. 'DiagnosticError', { fg = diag.error, reverse = true })
   hl(0, group .. 'DiagnosticWarn', { fg = diag.warn, reverse = true })
   hl(0, group .. 'DiagnosticHint', { fg = diag.hint, reverse = true })
   hl(0, group .. 'DiagnosticInfo', { fg = diag.info, reverse = true })
-  hl(0, group .. 'DiagnosticErrorLspClient', { fg = diag.error, bg = colors.background })
-  hl(0, group .. 'DiagnosticWarnLspClient', { fg = diag.warn, bg = colors.background })
-  hl(0, group .. 'DiagnosticHintLspClient', { fg = diag.hint, bg = colors.background })
-  hl(0, group .. 'DiagnosticInfoLspClient', { fg = diag.info, bg = colors.background })
-  hl(0, group .. 'Lsp', { fg = colors.normal, bg = colors.background })
+  hl(0, group .. 'DiagnosticErrorLspClient', { fg = diag.error, bg = background })
+  hl(0, group .. 'DiagnosticWarnLspClient', { fg = diag.warn, bg = background })
+  hl(0, group .. 'DiagnosticHintLspClient', { fg = diag.hint, bg = background })
+  hl(0, group .. 'DiagnosticInfoLspClient', { fg = diag.info, bg = background })
+  hl(0, group .. 'Lsp', { fg = colors.normal, bg = background })
   hl(0, group .. 'LspReverse', { fg = colors.normal, reverse = true })
-  hl(0, group .. 'Info', { fg = colors.normal, bg = colors.background })
+  hl(0, group .. 'Info', { fg = colors.normal, bg = background })
   hl(0, group .. 'InfoReverse', { fg = colors.normal, reverse = true })
 end
 
